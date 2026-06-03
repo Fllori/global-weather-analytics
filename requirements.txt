@@ -1,0 +1,6 @@
+streamlit
+duckdb
+pandas
+pydeck
+altair
+google-genai
