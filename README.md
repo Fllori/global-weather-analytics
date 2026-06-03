@@ -1,117 +1,67 @@
-# 🌦️ Global Weather Pipeline & Analytics Platform
+# 🌦️ Global Weather Analytics & GenAI Vacation Concierge
 
-An end-to-end, high-performance data pipeline that extracts global meteorological forecast data, optimizes it using an embedded columnar database engine, and visualizes multi-continental weather patterns, dynamic alerts, and scientific correlations in real-time.
+An advanced, end-to-end data platform and interactive dashboard built to clean, process, and visualize localized historical weather metrics and predictive solar radiation risks across European destinations. The application features a synchronized multi-page layout and integrates **Google Gemini AI** to provide custom, real-time lifestyle itineraries and travel safety advisories.
 
----
+## 🚀 Core Features
 
-## 🛠️ System Architecture & Data Flow
+- **🗺️ Interactive Geospatial Mapping:** Clean, adaptive visualization of European weather trends utilizing a customized tokenless Dark Matter PyDeck layout with dynamically scaled pixel-radius bubbles representing localized precipitation.
+- **🔄 Synchronized Multi-Page Architecture:** State-retaining sidebar filters powered by `st.session_state`. Selecting a country or city on one page locks the preference seamlessly across all tabs without widget reset faults.
+- **📊 Solar Radiation & UV Safety Profiles:** Advanced analytical charts mapping ultraviolet radiation metrics (`uv_index_max`) directly against official World Health Organization (WHO) biological risk categories.
+- **🤖 GenAI Vacation Concierge:** Automated integration with the native Google GenAI SDK (`gemini-2.5-flash`), delivering 3 highly specific, contextualized outdoor and safety recommendations tailored to the selected city's exact meteorological conditions.
 
-The platform is engineered as a decoupled, three-tier data architecture optimized for speed, low memory footprints, and portable execution without external database server dependencies.
+## 🛠️ Tech Stack & Architecture
 
-[Raw API Data (Open-Meteo)]
-│ (HTTP Requests via Python Requests)
-▼
-[1. Extraction Layer (src/extract.py)]
-│ (Writes highly compressed partitions)
-▼
-data/📂 /📂 /📂 /📂 /weather_HH-MM.parquet
-│
-│ (Blazing fast out-of-core streaming scan via DuckDB)
-▼
-[2. Transformation Layer (src/transform.py)]
-│ (Deduplication, sorting, and analytical flattening)
-▼
-data/clean/daily/consolidat_daily.parquet
-│
-│ (Direct disk-to-dataframe queries)
-▼
-[3. Presentation Layer (Streamlit App)]
-├── 🌦️ Overview & Geospatial Precipitation Map
-├── 📊 Cross-City Thermal Comparisons
-└── 🔬 Correlation Scientific Analytics (UV vs Temp)
-
-[Raw API Data (Open-Meteo)]
-│ (HTTP Requests via Python Requests)
-▼
-[1. Extraction Layer (src/extract.py)]
-│ (Writes highly compressed partitions)
-▼
-data/📂 /📂 /📂 /📂 /weather_HH-MM.parquet
-│
-│ (Blazing fast out-of-core streaming scan via DuckDB)
-▼
-[2. Transformation Layer (src/transform.py)]
-│ (Deduplication, sorting, and analytical flattening)
-▼
-data/clean/daily/consolidat_daily.parquet
-│
-│ (Direct disk-to-dataframe queries)
-▼
-[3. Presentation Layer (Streamlit App)]
-├── 🌦️ Overview & Geospatial Precipitation Map
-├── 📊 Cross-City Thermal Comparisons
-└── 🔬 Correlation Scientific Analytics (UV vs Temp)
-
-### Key Technology Stack Chosen
-* **Storage Layer:** **Apache Parquet** (Columnar file layout ensuring high compression and projection pushdown capabilities).
-* **Compute Engine:** **DuckDB** (An embedded vector-oriented OLAP database engine acting as our in-memory Data Warehouse layer).
-* **Data Manipulation:** **Pandas** (Strictly utilized for lightweight schema mapping and final dataframe array structuring).
-* **Frontend UI Engine:** **Streamlit & Altair** (Reactive web interface driving rapid interactive analytical graphs).
+- **Frontend Dashboard:** [Streamlit](https://streamlit.io/) (Multi-page configuration via `st.navigation`)
+- **Data Query Engine:** [DuckDB](https://duckdb.org/) (High-performance analytical in-memory storage parsing production assets)
+- **Geospatial Processing:** [PyDeck](https://deckgl.github.io/pydeck/) (Scatterplot presentation layers with dynamic float constraints)
+- **Data Wrangling:** [Pandas](https://pandas.pydata.org/) & [Apache Parquet](https://parquet.apache.org/) (Columnar storage optimization)
+- **Generative AI:** [Google GenAI SDK](https://github.com/google/generative-ai-python) (`gemini-2.5-flash` model layer)
 
 ---
 
-## 📂 Project Directory Structure
+## 💻 Installation & Local Setup
 
-weather_pipeline/
+Follow these steps to configure your environment and deploy the dashboard locally:
+
+1. Clone the Repository
+```bash
+git clone [https://github.com/Fllori/global-weather-analytics.git](https://github.com/Fllori/global-weather-analytics.git)
+cd global-weather-analytics
+
+2. Configure Virtual Environment (Recommended)
+# On macOS/Linux
+python3 -m venv .venv
+source .venv/bin/activate
+
+# On Windows
+python -m venv .venv
+.venv\Scripts\activate
+
+3. Install Dependencies
+pip install streamlit duckdb pandas pydeck altair google-genai
+
+4. Secure Secrets Management
+To ensure safe operations on Git and prevent API Token leakage, local configurations are isolated. Create a credentials store under .streamlit/secrets.toml (this file is excluded via .gitignore):
+# .streamlit/secrets.toml
+GEMINI_API_KEY = "YOUR_ACTUAL_GEMINI_API_KEY_HERE"
+
+5. Launch the Framework Dashboard
+Execute the central entry point orchestration layer:
+streamlit run app.py
+
+📁 Project Structure
+global-weather-analytics/
+├── .streamlit/
+│   └── secrets.toml          # Encrypted local variables store (API Keys)
 ├── data/
-│   ├── clean/
-│   │   └── daily/
-│   │       └── consolidat_daily.parquet   # Consolidated operational analytics engine file
-│   └── [City_Name]/                       # Dynamic partitioned cold storage directory
-│       └── YYYY/MM/DD/weather_HH-MM.parquet
+│   └── 3_load/
+│       └── weather_mart.parquet  # Optimized production Data Mart asset
 ├── dashboard/
-│   ├── overview.py                        # Live alerts and dynamic map rendering module
-│   ├── comparison.py                      # Multi-city line and bar comparison analytics
-│   └── correlation.py                     # Scientific Altair dual-axis UV tracking analysis
-├── src/
-│   ├── extract.py                         # API extraction pipeline orchestration script
-│   └── transform.py                       # DuckDB-powered data consolidation logic
-├── app.py                                 # Main system router and Streamlit navigation configuration
-└── README.md                              # System operational manual
+│   ├── overview.py           # General overview page with geospatial map
+│   └── uv_analysis.py        # Solar metrics analysis and Gemini AI integration
+├── .gitignore                # Git structural ignore protocol
+├── app.py                    # Platform entry point router and navigation controller
+└── README.md                 # Project documentation and setup guide
 
-🚀 Getting Started & Execution Guide
-1. Prerequisites & Environment Setup
-Ensure your workspace is configured with Python 3.10+. Install the necessary pipeline framework dependencies using your terminal terminal package manager:
-
-pip install streamlit pandas duckdb pyarrow requests altair
-
-2. Running the Data PipelineExecute the stages chronologically to populate the analytic engine file:
-
-Step 1: Trigger Data ExtractionFetches the latest 7-day meteorological snapshots across 42 global travel historical destinations.Bashpython src/extract.py
-
-Step 2: Trigger Data Transformation & OptimizationLeverages DuckDB to scan all partitioned files, drops historical duplicate indices keeping the freshest forecast updates, and builds the analytical runtime layer.Bashpython src/transform.py
-
-3. Launching the Dashboard InterfaceSpin up the presentation server using the local router:Bashstreamlit run app.py
-
-🔬 Analytical Capabilities & Business Logic
-🚨 Meteorological Automated Alert FrameworkThe dashboard analyzes live telemetry streams and applies thresholds bound to official meteorological hazards criteria:
-
-Extreme Thermal Risks: Standardized thresholds flag severe cold waves ($T_{min} \le 0.0^\circ\text{C}$) or dangerous heat stress waves ($T_{max} \ge 35.0^\circ\text{C}$).
-
-Flash Flood Routing Indicators: Active alerts flag heavy storm precipitation accumulations exceeding $30\text{ mm}$.
-
-Gale Force Wind Indicators: Triggers safety warnings when systemic gusts surpass $50\text{ km/h}$.
-
-Solar Radiation Vectors: Dynamic warnings highlight skin safety parameters whenever the maximum UV radiation threshold meets or exceeds $8.0\text{ UVI}$.
-
-🗺️ Geospatial Precipitation Density
-Map rendering utilizes an adaptive mathematical scaling expression bound to localized precipitation sums ($P_{sum}$) to drive variable visual cluster dimensions on screen dynamically:$$\text{Point Size} = (P_{sum} \times 50) + 50$$
-This ensures permanent baseline visibility for geographic points reporting no rainfall while dynamically exaggerating storm centers.
-
-🛡️ License & Project Specifications
-API Data Provider Acknowledgement: Free meteorological datasets sourced directly from Open-Meteo Weather API (CC BY 4.0 license structure).Operational Scope: Global multi-region dataset tracking ($40+$ cities spanning Europe and North Africa).
-
-### What makes this README great:
-1. **Clear Visual Flow:** It includes an elegant ASCII-style text diagram mapping your exact input-output workflow.
-2. **Advanced Details:** It references your structural layout (`data/clean/daily/consolidat_daily.parquet`), showing clean design practices.
-3. **Mathematical Documentation:** Uses formal LaTeX notation to document how point sizes on your map are calculated and how safety alert thresholds are computed.
+🔒 Security Compliance Note
+This repository enforces modern token isolation. No private API authorization headers or infrastructure data layers are hardcoded inside any presentation module. Production deployments utilize official cloud workspace configuration injection parameters to populate st.secrets dynamically.
