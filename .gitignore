@@ -1,0 +1,28 @@
+# === Mediu Virtual și Dependențe ===
+.venv/
+venv/
+ENV/
+pyvenv.cfg
+
+# === Date specifice proiectului (opțional, dar recomandat) ===
+# Ignorăm folderul 'data/' deoarece conține Parquet-uri mari generate local de pipeline
+data/
+# Ignorăm catalogul generat dacă vrei ca fiecare utilizator să și-l creeze singur
+config/cities_catalog.json
+
+# === Securitate și Secrete ===
+# FOARTE IMPORTANT: Ignorăm fișierul de secrete din Streamlit pentru a nu expune cheia Gemini
+.streamlit/secrets.toml
+
+# === Cache și fișiere compilate Python ===
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.mypy_cache/
+
+# === Fișiere sistem sau IDE ===
+.DS_Store
+.vscode/
+.idea/
